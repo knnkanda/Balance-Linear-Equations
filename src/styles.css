@@ -111,3 +111,23 @@ h1 { color: #493c3a; } h1 span { color: #e99d78; } .live-dot { background: #f1ad
 .mobile-stage-select { position: relative; }
 .stage-select-button { box-shadow: 0 4px 0 rgba(223,183,157,.3); }
 @media (max-width: 720px) { .game-heading:after { right: 6%; top: -18px; } .problem-count { padding: 5px 8px 4px; } .equation-card { box-shadow: 0 7px 0 rgba(247,215,191,.25); } .balance-card { box-shadow: 0 7px 0 rgba(239,216,197,.3); } .balance-scene { height: 217px; } .operation-button { padding: 16px 14px; } }
+
+/* A visible hand-drawn illustration layer, rather than only rounded CSS shapes */
+.balance-scene { overflow: hidden; }
+.sketch-defs { position: absolute; width: 0; height: 0; overflow: hidden; }
+.doodle-ink { position: absolute; z-index: 1; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
+.doodle-ink path { fill: none; stroke-linecap: round; stroke-linejoin: round; }
+.doodle-shadow { stroke: #d7b9a3; stroke-width: 4; opacity: .36; }
+.doodle-beam { stroke: #9f766d; stroke-width: 5; filter: url(#sketchy); }
+.doodle-beam-light { stroke: #edb89d; stroke-width: 2; opacity: .9; }
+.doodle-pan { stroke: #6ea986; stroke-width: 4; fill: #c9ead5; opacity: .82; filter: url(#sketchy); }
+.doodle-pan.right { stroke: #74a98d; fill: #c7e7d2; }
+.doodle-string { stroke: #a4ad9f; stroke-width: 2.5; stroke-dasharray: 7 4; opacity: .78; }
+.doodle-pivot { stroke: #98786e; stroke-width: 4; fill: #d9b6a2; opacity: .84; filter: url(#sketchy); }
+.doodle-base { stroke: #98786e; stroke-width: 4; fill: #b99082; opacity: .85; filter: url(#sketchy); }
+.balance-scene > .pan-wrap, .balance-scene > .beam, .balance-scene > .balance-pivot, .balance-scene > .balance-base { z-index: 2; }
+.balance-scene > .pan-wrap, .balance-scene > .beam, .balance-scene > .balance-pivot, .balance-scene > .balance-base, .balance-scene > .balance-face { filter: url(#sketchy); }
+.balance-scene .pan { background: rgba(208,237,216,.73); }
+.balance-scene .beam { background: rgba(178,132,119,.68); }
+.balance-scene .balance-base { background: rgba(178,137,123,.72); }
+.balance-scene .balance-face { z-index: 5; }

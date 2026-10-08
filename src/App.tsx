@@ -244,6 +244,24 @@ function App() {
           <div className="balance-card">
             <div className="balance-card-top"><span className="balance-title">THE BALANCE</span><span className="balance-state"><span className="balance-dot" /> つり合っています</span></div>
             <div className="balance-scene">
+              <svg className="sketch-defs" aria-hidden="true" focusable="false">
+                <defs>
+                  <filter id="sketchy" x="-8%" y="-8%" width="116%" height="116%">
+                    <feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="8" result="noise" />
+                    <feDisplacementMap in="SourceGraphic" in2="noise" scale="1.8" xChannelSelector="R" yChannelSelector="G" />
+                  </filter>
+                </defs>
+              </svg>
+              <svg className="doodle-ink" viewBox="0 0 600 250" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+                <path className="doodle-shadow" d="M177 105 C222 98 267 103 300 101 C338 99 380 102 425 105" />
+                <path className="doodle-beam" d="M121 101 C181 97 239 99 300 100 C361 99 420 97 480 101" />
+                <path className="doodle-beam-light" d="M126 105 C189 101 242 103 300 103 C360 102 414 101 476 105" />
+                <path className="doodle-pan left" d="M84 133 C106 139 156 140 205 133 C194 158 176 170 144 171 C111 170 94 157 84 133Z" />
+                <path className="doodle-pan right" d="M395 133 C443 140 494 139 516 133 C506 157 489 170 456 171 C424 170 406 158 395 133Z" />
+                <path className="doodle-string" d="M113 37 C113 61 112 82 113 113 M487 37 C487 60 488 82 487 113" />
+                <path className="doodle-pivot" d="M300 108 C293 137 289 165 283 194 C295 191 306 191 318 194 C311 164 307 137 300 108Z" />
+                <path className="doodle-base" d="M232 208 C267 205 333 205 368 208 C366 216 361 220 354 220 C318 218 281 218 246 220 C239 220 234 216 232 208Z" />
+              </svg>
               <div className="balance-glow" />
               <BalancePan coefficient={equation.leftX} constant={equation.leftConst} side="left" />
               <BalancePan coefficient={equation.rightX} constant={equation.rightConst} side="right" />
