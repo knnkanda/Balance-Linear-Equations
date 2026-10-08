@@ -5,4 +5,4 @@ dist/
 .env
 .env.*
 !.env.example
-
+CODEX_USAGE_LOG.md
