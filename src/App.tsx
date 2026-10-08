@@ -260,7 +260,7 @@ function App() {
           <div className="game-heading">
             <div>
               <p className="eyebrow"><span className="live-dot" /> BALANCE THE EQUATION</p>
-              <h1>天秤をつり合わせよう<span>。</span></h1>
+              <h1>天秤で解ける一次方程式<span>！</span></h1>
               <p className="subheading">左右に同じ操作をして、Xをひとりにしてください。</p>
             </div>
             <div className="problem-count"><span>PROBLEM</span><b>{String(problemIndex + 1).padStart(2, '0')}</b><i>/ 05</i></div>
