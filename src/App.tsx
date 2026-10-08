@@ -65,6 +65,12 @@ const levelCopy: Record<Level, { label: string; kicker: string; color: string }>
   3: { label: 'LEVEL 3', kicker: 'Xを集める', color: 'purple' },
 }
 
+const levelExplanations: Record<Level, { title: string; body: string; example: string; next: string }> = {
+  1: { title: '数字の分銅を先に片づける', body: 'まず、Xについていない数字を両辺から同じだけ取り除きます。そのあと、X箱の数で両辺を割ると、Xがひとりになります。', example: '2x + 4 = 10 → 2x = 6 → x = 3', next: 'LEVEL 2へ進む' },
+  2: { title: '同じ操作を左右にする', body: '数字が大きくなっても考え方は同じです。天秤をつり合わせたまま、数字を消し、最後にX箱を1箱にします。', example: '4x + 8 = 28 → 4x = 20 → x = 5', next: 'LEVEL 3へ進む' },
+  3: { title: 'X箱を片側に集める', body: 'X箱が左右にあるときは、少ない方のX箱を両辺から取り除きます。Xを片側に集めてから、数字を整理します。', example: '4x + 5 = x + 20 → 3x + 5 = 20 → x = 5', next: 'LEVEL 3をもう一度' },
+}
+
 function formatTerm(coefficient: number, constant: number): string {
   const x = coefficient === 0 ? '' : coefficient === 1 ? 'x' : `${coefficient}x`
   if (constant === 0) return x || '0'
@@ -152,6 +158,7 @@ function App() {
   const [showSuccess, setShowSuccess] = useState(false)
   const [isApplying, setIsApplying] = useState(false)
   const [history, setHistory] = useState<Equation[]>([])
+  const [showLevelSummary, setShowLevelSummary] = useState(false)
 
   const problem = problems[level][problemIndex]
   const operation = useMemo(() => getOperation(equation), [equation])
@@ -165,6 +172,7 @@ function App() {
     setEquation(problems[nextLevel][0].equation)
     setSteps(0)
     setHistory([])
+    setShowLevelSummary(false)
     setShowHint(false)
     setShowSuccess(false)
   }
@@ -179,7 +187,10 @@ function App() {
       setSteps((current) => current + 1)
       setShowHint(false)
       setIsApplying(false)
-      if (getOperation(nextEquation) === null) setShowSuccess(true)
+      if (getOperation(nextEquation) === null) {
+        setShowSuccess(true)
+        if (problemIndex === problems[level].length - 1) setShowLevelSummary(true)
+      }
     }, 220)
   }
 
@@ -187,6 +198,7 @@ function App() {
     setEquation(problem.equation)
     setSteps(0)
     setHistory([])
+    setShowLevelSummary(false)
     setShowHint(false)
     setShowSuccess(false)
   }
@@ -198,6 +210,7 @@ function App() {
     setHistory((current) => current.slice(0, -1))
     setSteps((current) => Math.max(0, current - 1))
     setShowSuccess(false)
+    setShowLevelSummary(false)
   }
 
   const nextProblem = () => {
@@ -208,6 +221,7 @@ function App() {
     setHistory([])
     setShowHint(false)
     setShowSuccess(false)
+    setShowLevelSummary(false)
   }
 
   return (
@@ -302,7 +316,7 @@ function App() {
               {!solved && <ArrowRight className="operation-arrow" size={20} />}
             </button>
             {history.length > 0 && <div className="history-strip"><span className="history-title">手順</span>{history.map((item, index) => <span className="history-step" key={`${item.leftX}-${item.leftConst}-${index}`}>{formatTerm(item.leftX, item.leftConst)} = {formatTerm(item.rightX, item.rightConst)}</span>)}</div>}
-            <div className="action-footer"><span><span className="tap-icon">↗</span> タップして操作</span><span className="footer-actions"><button onClick={goBack} disabled={history.length === 0}><ChevronLeft size={14} /> 一手戻る</button><button onClick={resetProblem}><RotateCcw size={14} /> 最初から</button></span></div>
+            <div className="action-footer"><span><span className="tap-icon">↗</span> タップして操作</span><span className="footer-actions"><button onClick={goBack} disabled={history.length === 0}><ChevronLeft size={14} /> 一手戻る</button><button className="next-inline" onClick={nextProblem}><ArrowRight size={14} /> 次の問題</button><button onClick={resetProblem}><RotateCcw size={14} /> 最初から</button></span></div>
           </div>
         </section>
 
@@ -315,6 +329,7 @@ function App() {
       </section>
 
       {showSuccess && <div className="success-toast"><div className="success-icon"><Check size={22} /></div><div><b>つり合った！</b><span>x = {problem.answer} です</span></div><button onClick={() => setShowSuccess(false)} aria-label="閉じる"><X size={16} /></button></div>}
+      {showLevelSummary && <div className="summary-backdrop"><section className="level-summary" role="dialog" aria-modal="true" aria-labelledby="summary-title"><div className="summary-stars">✦　✧　✦</div><span className="summary-kicker">LEVEL {level} CLEAR</span><h2 id="summary-title">{levelExplanations[level].title}</h2><p>{levelExplanations[level].body}</p><div className="summary-example">{levelExplanations[level].example}</div><div className="summary-rule"><span>覚えておこう</span><b>左右に同じ操作をすると、天秤はつり合ったまま</b></div><div className="summary-actions"><button onClick={() => setShowLevelSummary(false)}>あとで見る</button><button className="summary-primary" onClick={() => selectLevel(level === 3 ? 3 : (level + 1) as Level)}>{levelExplanations[level].next} <ArrowRight size={17} /></button></div></section></div>}
     </main>
   )
 }
