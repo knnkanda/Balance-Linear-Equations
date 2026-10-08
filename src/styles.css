@@ -150,3 +150,29 @@ body { background: #220d32; }
 .action-footer { color: rgba(255,245,227,.82); } .action-footer button { color: rgba(255,245,227,.82); }
 .insight-panel { color: #fff8ed; } .insight-heading b { color: #fff8ed; } .insight-card, .score-card { background: rgba(255,248,235,.92); border-color: #ffcf91; }
 @media (max-width: 720px) { .app-shell { background-position: center top; background-size: auto 100%; background-attachment: scroll; } .topbar { background: rgba(35,10,54,.72); } .game-layout { padding-top: 20px; } .mobile-stage-select { background: rgba(255,236,206,.88); border-radius: 10px; padding: 2px; } .stage-select-button { background: #711f77; color: #fff7dd; box-shadow: 0 4px 0 rgba(52,12,62,.35); } }
+
+.history-strip { display: flex; gap: 6px; align-items: center; overflow-x: auto; margin-top: 13px; padding: 7px 2px 3px; scrollbar-width: none; }
+.history-strip::-webkit-scrollbar { display: none; }
+.history-title { flex: 0 0 auto; color: #f2c39d; font: 9px 'DM Mono'; letter-spacing: .08em; }
+.history-step { flex: 0 0 auto; padding: 5px 8px; border: 1px dashed rgba(255,204,158,.75); border-radius: 9px; background: rgba(255,249,234,.88); color: #8e5571; font: 9px 'DM Mono'; }
+.footer-actions { display: flex; gap: 10px; align-items: center; }
+.action-footer button:disabled { opacity: .42; cursor: not-allowed; }
+
+@media (max-width: 720px) {
+  .balance-scene { overflow: visible; transform: none; height: 222px; margin-bottom: 0; }
+  .balance-scene .pan-wrap { width: 36%; top: 18px; }
+  .balance-scene .pan-wrap.left { left: 2%; }
+  .balance-scene .pan-wrap.right { right: 2%; }
+  .balance-scene .pan { width: 100%; }
+  .balance-scene .pan-items { gap: 2px; padding-left: 3px; padding-right: 3px; }
+  .balance-scene .weight { width: 24px; height: 31px; }
+  .balance-scene .weight-x { font-size: 14px; }
+  .balance-scene .weight-caption { font-size: 7px; }
+  .balance-scene .beam { left: 18%; width: 64%; }
+  .balance-scene .balance-pivot { left: calc(50% - 8px); }
+  .balance-scene .balance-face { left: calc(50% - 19px); }
+  .balance-scene .balance-base { left: calc(50% - 55px); width: 110px; }
+  .doodle-ink { inset: 0; }
+  .footer-actions { gap: 7px; }
+  .action-footer { font-size: 8px; }
+}

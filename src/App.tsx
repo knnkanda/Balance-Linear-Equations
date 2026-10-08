@@ -40,16 +40,22 @@ const problems: Record<Level, Problem[]> = {
     { equation: { leftX: 2, leftConst: 4, rightX: 0, rightConst: 10 }, answer: 3, title: 'まずは引き算から', description: '数字の分銅を両側から同じだけ取り除きます。' },
     { equation: { leftX: 3, leftConst: 3, rightX: 0, rightConst: 15 }, answer: 4, title: '天秤をつり合わせよう', description: '両側から同じ操作をすると、バランスは保たれます。' },
     { equation: { leftX: 2, leftConst: 6, rightX: 0, rightConst: 16 }, answer: 5, title: 'Xをひとりにしよう', description: '最後にX箱を1箱にすれば答えが見えてきます。' },
+    { equation: { leftX: 4, leftConst: 4, rightX: 0, rightConst: 20 }, answer: 4, title: '分銅を見きわめよう', description: '数字の分銅を先に片づけると、Xが見えてきます。' },
+    { equation: { leftX: 5, leftConst: 10, rightX: 0, rightConst: 30 }, answer: 4, title: 'LEVEL 1の仕上げ', description: '同じ操作を左右にすることを忘れずに。' },
   ],
   2: [
     { equation: { leftX: 4, leftConst: 8, rightX: 0, rightConst: 28 }, answer: 5, title: '大きな数にも挑戦', description: '分銅を消してから、X箱の数をそろえます。' },
     { equation: { leftX: 5, leftConst: 10, rightX: 0, rightConst: 35 }, answer: 5, title: '同じ操作を2回', description: '天秤の左右には、いつも同じ操作をします。' },
     { equation: { leftX: 3, leftConst: 9, rightX: 0, rightConst: 24 }, answer: 5, title: '焦らず一手ずつ', description: '見えている分銅から片づけていきましょう。' },
+    { equation: { leftX: 4, leftConst: 12, rightX: 0, rightConst: 32 }, answer: 5, title: '少し大きな分銅', description: '数字が大きくなっても、やることは同じです。' },
+    { equation: { leftX: 6, leftConst: 12, rightX: 0, rightConst: 48 }, answer: 6, title: 'LEVEL 2の仕上げ', description: 'X箱を1箱にする最後の一手まで進めましょう。' },
   ],
   3: [
     { equation: { leftX: 4, leftConst: 5, rightX: 1, rightConst: 20 }, answer: 5, title: 'X箱が両側に登場', description: 'まずX箱を片側に集めると、道筋が見えます。' },
     { equation: { leftX: 5, leftConst: 4, rightX: 2, rightConst: 19 }, answer: 5, title: 'Xをまとめよう', description: '少ない方のX箱を両側から取り除きます。' },
     { equation: { leftX: 6, leftConst: 6, rightX: 2, rightConst: 26 }, answer: 5, title: '仕上げの一問', description: '天秤が傾かないように、左右へ同じ操作を。' },
+    { equation: { leftX: 7, leftConst: 7, rightX: 2, rightConst: 32 }, answer: 5, title: 'X箱をたくさん集める', description: 'まず少ない方のX箱を取り除きます。' },
+    { equation: { leftX: 8, leftConst: 6, rightX: 3, rightConst: 31 }, answer: 5, title: 'LEVEL 3の仕上げ', description: 'X箱を集めて、数字の分銅を整理しましょう。' },
   ],
 }
 
@@ -145,11 +151,12 @@ function App() {
   const [showHint, setShowHint] = useState(false)
   const [showSuccess, setShowSuccess] = useState(false)
   const [isApplying, setIsApplying] = useState(false)
+  const [history, setHistory] = useState<Equation[]>([])
 
   const problem = problems[level][problemIndex]
   const operation = useMemo(() => getOperation(equation), [equation])
   const solved = operation === null
-  const progress = Math.min((steps / 3) * 100, 100)
+  const progress = solved ? 100 : Math.min((steps / 3) * 100, 100)
   const equationText = `${formatTerm(equation.leftX, equation.leftConst)} = ${formatTerm(equation.rightX, equation.rightConst)}`
 
   const selectLevel = (nextLevel: Level) => {
@@ -157,6 +164,7 @@ function App() {
     setProblemIndex(0)
     setEquation(problems[nextLevel][0].equation)
     setSteps(0)
+    setHistory([])
     setShowHint(false)
     setShowSuccess(false)
   }
@@ -166,6 +174,7 @@ function App() {
     setIsApplying(true)
     window.setTimeout(() => {
       const nextEquation = applyOperation(equation, operation)
+      setHistory((current) => [...current, equation])
       setEquation(nextEquation)
       setSteps((current) => current + 1)
       setShowHint(false)
@@ -177,7 +186,17 @@ function App() {
   const resetProblem = () => {
     setEquation(problem.equation)
     setSteps(0)
+    setHistory([])
     setShowHint(false)
+    setShowSuccess(false)
+  }
+
+  const goBack = () => {
+    if (history.length === 0 || isApplying) return
+    const previousEquation = history[history.length - 1]
+    setEquation(previousEquation)
+    setHistory((current) => current.slice(0, -1))
+    setSteps((current) => Math.max(0, current - 1))
     setShowSuccess(false)
   }
 
@@ -186,6 +205,7 @@ function App() {
     setProblemIndex(nextIndex)
     setEquation(problems[level][nextIndex].equation)
     setSteps(0)
+    setHistory([])
     setShowHint(false)
     setShowSuccess(false)
   }
@@ -229,7 +249,7 @@ function App() {
               <h1>天秤をつり合わせよう<span>。</span></h1>
               <p className="subheading">左右に同じ操作をして、Xをひとりにしてください。</p>
             </div>
-            <div className="problem-count"><span>PROBLEM</span><b>{String(problemIndex + 1).padStart(2, '0')}</b><i>/ 03</i></div>
+            <div className="problem-count"><span>PROBLEM</span><b>{String(problemIndex + 1).padStart(2, '0')}</b><i>/ 05</i></div>
           </div>
 
           <div className={`equation-card ${isApplying ? 'shaking' : ''}`}>
@@ -281,7 +301,8 @@ function App() {
               <span className="operation-copy"><small>{solved ? 'NICE WORK' : '両辺に同じ操作'}</small><strong>{operationLabel(operation)}</strong></span>
               {!solved && <ArrowRight className="operation-arrow" size={20} />}
             </button>
-            <div className="action-footer"><span><span className="tap-icon">↗</span> タップして操作</span><button onClick={resetProblem}><RotateCcw size={14} /> 最初から</button></div>
+            {history.length > 0 && <div className="history-strip"><span className="history-title">手順</span>{history.map((item, index) => <span className="history-step" key={`${item.leftX}-${item.leftConst}-${index}`}>{formatTerm(item.leftX, item.leftConst)} = {formatTerm(item.rightX, item.rightConst)}</span>)}</div>}
+            <div className="action-footer"><span><span className="tap-icon">↗</span> タップして操作</span><span className="footer-actions"><button onClick={goBack} disabled={history.length === 0}><ChevronLeft size={14} /> 一手戻る</button><button onClick={resetProblem}><RotateCcw size={14} /> 最初から</button></span></div>
           </div>
         </section>
 
