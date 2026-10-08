@@ -195,3 +195,26 @@ body { background: #220d32; }
 .summary-example { display: inline-block; padding: 10px 16px; border-radius: 13px; background: #fff0d4; color: #7f286e; font-weight: 800; font-size: 18px; } .summary-rule { margin-top: 16px; padding: 12px; border-radius: 14px; background: #eef8ef; color: #47775f; } .summary-rule span { display: block; margin-bottom: 4px; color: #74a886; font-size: 11px; } .summary-rule b { font-size: 13px; }
 .summary-actions { display: flex; gap: 10px; justify-content: center; margin-top: 20px; } .summary-actions button { min-height: 44px; padding: 9px 15px; border: 1px solid #e8b8a4; border-radius: 12px; background: #fff; color: #8d5270; font-weight: 700; cursor: pointer; } .summary-actions .summary-primary { display: inline-flex; align-items: center; gap: 6px; border-color: #842768; background: #842768; color: #fff8ed; }
 @media (max-width: 420px) { .level-summary { padding: 22px 16px 18px; } .summary-actions { flex-direction: column-reverse; } .summary-actions button { width: 100%; } }
+
+/* The equation pieces are the hero: the balance is a soft supporting illustration. */
+.balance-scene .doodle-beam { stroke: #b9a49c; stroke-width: 3; opacity: .24; filter: none; }
+.balance-scene .doodle-beam-light { stroke: #ead4c8; stroke-width: 1.5; opacity: .3; }
+.balance-scene .doodle-shadow { stroke: #d9c6bc; stroke-width: 2; opacity: .18; }
+.balance-scene .doodle-string { stroke: #b9c5bb; stroke-width: 2; opacity: .38; }
+.balance-scene > .beam { z-index: 1; height: 5px; opacity: .28; box-shadow: 0 2px 0 rgba(234,216,206,.5); filter: none; }
+.balance-scene > .beam .beam-cap { opacity: .35; }
+.balance-scene > .pan-wrap { z-index: 5; }
+.balance-scene > .pan-wrap .weight { z-index: 7; }
+.balance-scene > .balance-pivot { z-index: 2; opacity: .42; }
+.balance-scene > .balance-base { z-index: 1; opacity: .35; }
+.action-footer { gap: 8px; }
+.action-footer > span:first-child { color: #a67580; }
+.action-footer button { color: #8d5270 !important; min-height: 38px; padding: 7px 9px; border: 1px solid #e8c0b0; border-radius: 10px; background: rgba(255,255,255,.82); font-weight: 700; }
+.action-footer button:hover:not(:disabled) { background: #fff2df; }
+.action-footer button.next-inline { border-color: #842768; background: #842768; color: #fff8ed !important; }
+@media (max-width: 720px) {
+  .footer-actions { width: 100%; justify-content: stretch; gap: 6px; }
+  .footer-actions button { flex: 1 1 0; justify-content: center; font-size: 10px; }
+  .action-footer { flex-wrap: wrap; }
+  .action-footer > span:first-child { width: 100%; }
+}
